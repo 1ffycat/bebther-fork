@@ -1,12 +1,17 @@
-import Parsers.baseParser as baseParser
-import requests
-import json
+"""Data parser for AccuWeather"""
+
 import datetime
+import json
+
+import requests
+
+import Parsers.base_parser as base_parser
 from main import debug
 
 
-class Parser(baseParser.Parser):
+class Parser(base_parser.Parser):
     """Parser object used for parsing the weather data"""
+
     name = "AccuWeather"
     description = "AccuWeather has local and international weather forecasts\
          from the most accurate weather forecasting technology\
@@ -17,7 +22,7 @@ class Parser(baseParser.Parser):
     # 2LkBQzbEiYQyUvlWEfSqjg0GSsLERr4c
     # Vfo3wf67gGWqSX4d5okcvGOlLcOOoghe
 
-    def getData(location_key="292712") -> dict:
+    def get_data(location_key="292712") -> dict:
         """Parse weather data from the resource and
         return as a formatted dictionary."""
         response = requests.get(
@@ -69,16 +74,17 @@ class Parser(baseParser.Parser):
         data["UVIndex"] = response[0]["UVIndex"]
         return data
 
-    def getCity(cityName="London") -> str:
+    def get_city(city_name="London") -> str:
         """Get city ID by the city name"""
         try:
             response = requests.get(
                 url="http://dataservice.accuweather.com/locations/v1/cities/"
-                + f"search/?apikey={Parser.apikey}&q={cityName}")
+                + f"search/?apikey={Parser.apikey}&q={city_name}"
+            )
             print(response.url)
             if response.status_code != 200:
                 return None
-            response = json.loads(response. content)
+            response = json.loads(response.content)
             return response[0]["Key"]
         except Exception as e:
             debug(f"Couldn't get city id: {e}")

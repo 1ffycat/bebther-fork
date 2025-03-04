@@ -1,8 +1,11 @@
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout, QLabel
+"""Dialog operations"""
+
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QLabel, QVBoxLayout
 
 
 class NoDataDialog(QDialog):
     """Dialog explaining why the data could not be parsed"""
+
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Sorry!")
@@ -16,7 +19,7 @@ class NoDataDialog(QDialog):
             + " limits on how many requests you can send a day.\n"
             + "Please, select a different source, "
             + "this one should become available soon"
-            )
+        )
         self.layout.addWidget(msg)
         self.layout.addWidget(self.btn)
         self.setLayout(self.layout)
@@ -24,6 +27,7 @@ class NoDataDialog(QDialog):
 
 class DBSavedDialog(QDialog):
     """Notification dialog about completing database operation"""
+
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Done")
@@ -31,9 +35,7 @@ class DBSavedDialog(QDialog):
         self.btn = QDialogButtonBox(btn)
         self.btn.clicked.connect(self.close)
         self.layout = QVBoxLayout()
-        msg = QLabel(
-            "Current weather was saved to the database."
-            )
+        msg = QLabel("Current weather was saved to the database.")
         self.layout.addWidget(msg)
         self.layout.addWidget(self.btn)
         self.setLayout(self.layout)
@@ -41,6 +43,7 @@ class DBSavedDialog(QDialog):
 
 class DBFailDialog(QDialog):
     """Notification dialog about failing database operation"""
+
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Sorry!")
@@ -48,9 +51,7 @@ class DBFailDialog(QDialog):
         self.btn = QDialogButtonBox(btn)
         self.btn.clicked.connect(self.close)
         self.layout = QVBoxLayout()
-        msg = QLabel(
-            "Couldn't save weather info to the database"
-            )
+        msg = QLabel("Couldn't save weather info to the database")
         self.layout.addWidget(msg)
         self.layout.addWidget(self.btn)
         self.setLayout(self.layout)
@@ -58,6 +59,7 @@ class DBFailDialog(QDialog):
 
 class ShareFailDialog(QDialog):
     """Notification dialog about failing share operation"""
+
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Sorry!")
@@ -68,7 +70,7 @@ class ShareFailDialog(QDialog):
         msg = QLabel(
             "Can't share because there is no available data.\n"
             + "Please, change the weather source or update the data"
-            )
+        )
         self.layout.addWidget(msg)
         self.layout.addWidget(self.btn)
         self.setLayout(self.layout)

@@ -1,18 +1,23 @@
-import requests
-import json
-from main import debug
+"""Data parser for OpenWeatherMap"""
+
 import datetime
+import json
+
+import requests
+
+from main import debug
 
 
 class Parser:
     """Basic parser object's structure.
     Used for reference"""
+
     name = "OpenWeatherMap"
     description = "60 calls a minute"
     URL = "https://openweathermap.org/"
     apikey = "c000d489291afdc8c6b578c2c79d2e5f"
 
-    def getData(location_key="292712") -> dict:
+    def get_data(location_key="292712") -> dict:
         """Parse the data and return as a formatted dict"""
         result = dict()
         # Sending request to get lon & lat
@@ -41,10 +46,16 @@ class Parser:
         result["WindSpeed"] = response["wind_speed"]
         result["Pressure"] = response["pressure"]
         result["UVIndex"] = response["uvi"]
-        result["SunriseTime"] = datetime.datetime.fromtimestamp(
-            int(response["sunrise"])).time().strftime("%H:%M")
-        result["SunsetTime"] = datetime.datetime.fromtimestamp(
-            int(response["sunset"])).time().strftime("%H:%M")
+        result["SunriseTime"] = (
+            datetime.datetime.fromtimestamp(int(response["sunrise"]))
+            .time()
+            .strftime("%H:%M")
+        )
+        result["SunsetTime"] = (
+            datetime.datetime.fromtimestamp(int(response["sunset"]))
+            .time()
+            .strftime("%H:%M")
+        )
         # Sending request to get day/night temperatures
         response = requests.get(
             url="https://api.openweathermap.org/data/2.5/forecast?"
@@ -58,7 +69,7 @@ class Parser:
         result["NightTemperature"] = round(float(response["temp_min"]), 1)
         return result
 
-    def getCity(cityName="Irkutsk") -> str:
+    def get_city(city_name="Irkutsk") -> str:
         """Get the city id from name"""
         # OWM doesn't need any ID, only city name is needed
-        return cityName
+        return city_name

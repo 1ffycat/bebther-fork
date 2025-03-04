@@ -1,8 +1,11 @@
-import sqlite3
-from main import debug
+"""Database operations"""
+
 import datetime
-import pathlib
 import os
+import pathlib
+import sqlite3
+
+from main import debug
 
 db = sqlite3.Connection
 
@@ -12,8 +15,7 @@ def start() -> None:
     global db
     # Trying to connect to the database
     try:
-        path = (f"{pathlib.Path(__file__).parent.resolve().parent}"
-                + "\\Database\\")
+        path = f"{pathlib.Path(__file__).parent.resolve().parent}" + "\\Database\\"
         os.chdir(f"{path}\\")
         os.makedirs(path)
     except Exception as e:
@@ -34,7 +36,8 @@ def initialize() -> None:
         debug(f"Database not found. Exiting")
         quit()
     # Creating tables if those does not exist
-    db.execute("""CREATE TABLE IF NOT EXISTS Weather(
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS Weather(
         Date date PRIMARY KEY,
         City text NOT NULL,
         Source text NOT NULL,
@@ -48,11 +51,12 @@ def initialize() -> None:
         Humidity float,
         WindSpeed float
     )
-    """)
+    """
+    )
     debug("Database initialized")
 
 
-def write(data) -> bool:
+def write(data: dict[str, str]) -> bool:
     """Write data to the database
     :param data: Formatted dict() of data"""
     debug(data["Date"].strftime("%Y-%m-%d"))
@@ -63,7 +67,8 @@ def write(data) -> bool:
         return False
     try:
         # Writing data to the database
-        db.execute(f"""INSERT INTO Weather(Date, City, Source, Temperature, \
+        db.execute(
+            f"""INSERT INTO Weather(Date, City, Source, Temperature, \
             DayTemperature, NightTemperature, Pressure, UVIndex,\
                  SunriseTime, SunsetTime, Humidity, WindSpeed)
     VALUES(\
@@ -78,7 +83,8 @@ def write(data) -> bool:
         time('{data["SunriseTime"]}'),\
         time('{data["SunsetTime"]}'),\
         {data["Humidity"]},\
-        {data["WindSpeed"]})""")
+        {data["WindSpeed"]})"""
+        )
         # Commiting the changes
         db.commit()
         debug("Database modified")
@@ -107,9 +113,11 @@ def read(date: datetime.date) -> dict:
         result = cur.fetchone()  # Parsing the row into the dict
         result = dict(result)
         result["SunriseTime"] = datetime.time.fromisoformat(
-            result["SunriseTime"]).strftime('%H:%M')
+            result["SunriseTime"]
+        ).strftime("%H:%M")
         result["SunsetTime"] = datetime.time.fromisoformat(
-            result["SunsetTime"]).strftime('%H:%M')
+            result["SunsetTime"]
+        ).strftime("%H:%M")
         return result
     except Exception as e:
         debug(f"Couldn't read database data: {e}")
